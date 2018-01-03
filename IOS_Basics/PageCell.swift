@@ -33,6 +33,8 @@ class PageCell: UICollectionViewCell{
         }
     }
     
+   
+    
     let imageView:UIImageView = {
         let imageview = UIImageView(image:#imageLiteral(resourceName: "og.png"))
         imageview.contentMode = .scaleAspectFit
@@ -53,30 +55,23 @@ class PageCell: UICollectionViewCell{
         super.init(frame:frame)
         setupImageview()
         setupTextView()
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
     }
+   
     
     private func setupImageview(){
         
         let topImageContainerView=UIView()
-        
         addSubview(topImageContainerView)
-        
         topImageContainerView.translatesAutoresizingMaskIntoConstraints=false
-        
         topImageContainerView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.5).isActive=true
-        
         topImageContainerView.topAnchor.constraint(equalTo: topAnchor).isActive=true
-        
         topImageContainerView.rightAnchor.constraint(equalTo: rightAnchor).isActive=true
-        
         topImageContainerView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive=true
-        
         topImageContainerView.addSubview(imageView)
         
         imageView.centerXAnchor

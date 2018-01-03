@@ -41,54 +41,10 @@ class ViewController: UIViewController {
             return textView
         }()
     
-        private let prev_button:UIButton = {
-            let button=UIButton(type:.system)
-            button.setTitle("PREV", for: .normal)
-            button.translatesAutoresizingMaskIntoConstraints = false
-            button.titleLabel?.font=UIFont.boldSystemFont(ofSize: 14)
-            button.setTitleColor(UIColor.gray,for:.normal)
-            return button
-        }()
+        
     
     
-        private let next_button:UIButton = {
-            let button=UIButton(type:.system)
-            button.setTitle("NEXT", for: .normal)
-            button.translatesAutoresizingMaskIntoConstraints = false
-            button.titleLabel?.font=UIFont.boldSystemFont(ofSize: 14)
-            button.setTitleColor(.mainPink,for:.normal)
-            return button
-        }()
-    
-        private let page_control:UIPageControl = {
-            let pc=UIPageControl()
-            pc.currentPage = 0
-            pc.numberOfPages = 4
-            pc.currentPageIndicatorTintColor = .mainPink
-            let pc_color=UIColor(displayP3Red: 249/255, green: 207/255, blue: 224/255, alpha: 1)
-            pc.pageIndicatorTintColor=pc_color
-            return pc
-        }()
-    
-    
-        fileprivate func setUpBottom_Controls(){
-            let bottomControlsStackView = UIStackView(arrangedSubviews:
-                [prev_button,page_control,next_button])
-            bottomControlsStackView.translatesAutoresizingMaskIntoConstraints=false
-            bottomControlsStackView.distribution = .fillEqually
-            
-            view.addSubview(bottomControlsStackView)
-            
-            NSLayoutConstraint.activate([
-                bottomControlsStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-                bottomControlsStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-                bottomControlsStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-                bottomControlsStackView.heightAnchor.constraint(equalToConstant: 50)
-            ])
-            
-            
-            
-        }
+        
     
         
         override func viewWillAppear(_ animated: Bool) {
@@ -103,7 +59,6 @@ class ViewController: UIViewController {
             view.addSubview(descriptionTextview)
             setupImageview()
             setupTextView()
-            setUpBottom_Controls()
         }
     
     

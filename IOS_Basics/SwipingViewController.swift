@@ -29,6 +29,10 @@ class SwipingViewController:UICollectionViewController,UICollectionViewDelegateF
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setUpBottom_Controls()
+        
+        
+        
         collectionView?.backgroundColor = .white
         collectionView?.register(PageCell.self, forCellWithReuseIdentifier: "cellId")
         collectionView?.isPagingEnabled=true
@@ -53,6 +57,83 @@ class SwipingViewController:UICollectionViewController,UICollectionViewDelegateF
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width:view.frame.width,height:view.frame.height)
+    }
+    
+    private let prev_button:UIButton = {
+        let button=UIButton(type:.system)
+        button.setTitle("PREV", for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.titleLabel?.font=UIFont.boldSystemFont(ofSize: 14)
+        button.setTitleColor(UIColor.gray,for:.normal)
+        button.addTarget(self, action: #selector(handlePrev), for: .touchUpInside)
+        return button
+    }()
+    
+    
+    private let next_button:UIButton = {
+        let button=UIButton(type:.system)
+        button.setTitle("NEXT", for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.titleLabel?.font=UIFont.boldSystemFont(ofSize: 14)
+        button.setTitleColor(.mainPink,for:.normal)
+        button.addTarget(self, action: #selector(handleNext), for: .touchUpInside)
+        return button
+    }()
+    
+    @objc private func handleNext(){
+        let nextIndex = min(page_control.currentPage+1,pages.count-1)
+        let indexPath = IndexPath(item: nextIndex, section: 0)
+        page_control.currentPage=nextIndex
+        collectionView?.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+    }
+    
+    @objc private func handlePrev(){
+        let nextIndex = max(page_control.currentPage-1,0)
+        let indexPath = IndexPath(item: nextIndex, section: 0)
+        page_control.currentPage=nextIndex
+        collectionView?.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+    }
+    
+    private lazy var page_control:UIPageControl = {
+        let pc=UIPageControl()
+        pc.currentPage = 0
+        pc.numberOfPages = pages.count
+        pc.currentPageIndicatorTintColor = .mainPink
+        let pc_color=UIColor(displayP3Red: 249/255, green: 207/255, blue: 224/255, alpha: 1)
+        pc.pageIndicatorTintColor=pc_color
+        return pc
+    }()
+    
+    fileprivate func setUpBottom_Controls(){
+        let bottomControlsStackView = UIStackView(arrangedSubviews:
+            [prev_button,page_control,next_button])
+        bottomControlsStackView.translatesAutoresizingMaskIntoConstraints=false
+        bottomControlsStackView.distribution = .fillEqually
+        
+        view.addSubview(bottomControlsStackView)
+        
+        NSLayoutConstraint.activate([
+            bottomControlsStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            bottomControlsStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            bottomControlsStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            bottomControlsStackView.heightAnchor.constraint(equalToConstant: 50)
+            ])
+    }
+    override func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        let x=targetContentOffset.pointee.x
+        page_control.currentPage=Int(x/view.frame.width)
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        coordinator.animate(alongsideTransition: { (_) in
+            self.collectionViewLayout.invalidateLayout()
+            let indexpath = IndexPath(item:self.page_control.currentPage,section:0)
+            self.collectionView?.scrollToItem(at: indexpath, at: .centeredHorizontally, animated: true)
+            
+        }) { (_) in
+            
+        }
+        
     }
     
     
