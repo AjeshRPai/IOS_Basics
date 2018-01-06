@@ -8,24 +8,20 @@
 
 import UIKit
 
+import Contacts
+
 
 
 class ViewController: UITableViewController {
     
     let cellid="cellid"
     
-    var twoDimensionalArray = [
-        ExpandableNames(isExapnded: true, names:["Ajesh","Arun"].map{ Contact(name:$0,isFavourite:false)} ),
-         ExpandableNames(isExapnded: true, names:["Vineetha","Veena"].map{ Contact(name:$0,isFavourite:false)}),
-          ExpandableNames(isExapnded: true, names:["Varun"].map{ Contact(name:$0,isFavourite:false)}),
-           ExpandableNames(isExapnded: true, names:["Ananthu"].map{ Contact(name:$0,isFavourite:false)}),
-    ]
-    
-    
+    var twoDimensionalArray = [ExpandableNames]()
+
     func favCallback(cell:UITableViewCell){
         
         let indexPathTapped = tableView.indexPath(for: cell)
-        let contact=twoDimensionalArray[indexPathTapped!.section]
+        let contact = self.twoDimensionalArray[indexPathTapped!.section]
             .names[indexPathTapped!.row]
         let hasFavourited = !contact.isFavourite
         twoDimensionalArray[indexPathTapped!.section]
@@ -36,29 +32,41 @@ class ViewController: UITableViewController {
     
     var showindexpaths=false
     
-    @objc func handleShowIndexpath(){
-        
-        var indexpathtoReload=[IndexPath]()
-        for section in twoDimensionalArray.indices{
-            for row in twoDimensionalArray[section].names.indices{
-                let indexpath=IndexPath(row: row, section: section)
-                indexpathtoReload.append(indexpath)
-            }
-        }
-        showindexpaths = !showindexpaths
-        let animationStyle = showindexpaths ? UITableViewRowAnimation.right : .left
-        tableView.reloadRows(at: indexpathtoReload, with: animationStyle)
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Show index path",
-                                                            style: .plain,
-                                                            target: self,
-                                                            action: #selector(handleShowIndexpath))
+        fetchContacts()
         navigationItem.title="Contacts"
         navigationController?.navigationBar.prefersLargeTitles = true
         tableView.register(ContactCell.self, forCellReuseIdentifier: cellid)
+    }
+    
+    private func fetchContacts(){
+        let store = CNContactStore()
+        
+        store.requestAccess(for: .contacts) { (granted, error) in
+            if(granted){
+                let keys = [CNContactGivenNameKey,CNContactFamilyNameKey,CNContactPhoneNumbersKey]
+                let request = CNContactFetchRequest(keysToFetch: keys as [CNKeyDescriptor])
+                
+                do{
+                    var contacts=[FavouriteContacts]()
+                    try store.enumerateContacts(with: request, usingBlock: { (contact, stopPointer) in
+                        contacts.append(FavouriteContacts(contact:contact,isFavourite:false))
+                    })
+                    
+                    let names = ExpandableNames(isExapnded:true,names:contacts)
+                    self.twoDimensionalArray=[names]
+                    self.tableView.reloadData()
+                }catch let _{
+                    fatalError("There has beeen some error in the Calculation ")
+                }
+            }else {
+                fatalError("there was some error ")
+            }
+        }
+        
+        
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -89,13 +97,12 @@ class ViewController: UITableViewController {
         }
     }
     
-    
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 36
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return twoDimensionalArray.count
+        return self.twoDimensionalArray.count
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -103,13 +110,18 @@ class ViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell=tableView.dequeueReusableCell(withIdentifier: cellid, for: indexPath) as! ContactCell
+        
+        let cell = ContactCell(style: .subtitle, reuseIdentifier: cellid)
         cell.link = self
-        let contact = twoDimensionalArray[indexPath.section].names[indexPath.row]
-        cell.accessoryView?.tintColor = contact.isFavourite ? UIColor.red : .gray
-        if(showindexpaths){
-            cell.textLabel?.text = contact.name
-        }
+        let favouritableContact = twoDimensionalArray[indexPath.section].names[indexPath.row]
+        
+        print(favouritableContact.contact.givenName)
+
+        
+        cell.accessoryView?.tintColor = favouritableContact.isFavourite ? UIColor.red : .gray
+        cell.textLabel?.text = favouritableContact.contact.givenName + " " + favouritableContact.contact.familyName
+        cell.detailTextLabel?.text = favouritableContact.contact.phoneNumbers.first?.value.stringValue
+
         return cell
     }
     

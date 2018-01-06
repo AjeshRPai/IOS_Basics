@@ -7,15 +7,16 @@
 //
 
 import Foundation
+import Contacts
 
 struct ExpandableNames {
 
     var isExapnded:Bool
-    var names:[Contact]
+    var names:[FavouriteContacts]
 }
 
 
-struct Contact{
-    var name:String
+struct FavouriteContacts{
+    var contact:CNContact
     var isFavourite:Bool
 }
