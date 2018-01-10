@@ -27,6 +27,11 @@ class ContactCell: UITableViewCell{
     
     }
     
+
+    
+    
+    
+    
     
     @objc private func handleFav(){
         link?.favCallback(cell:self);

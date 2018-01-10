@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1636E0B920065A6300A5DCEE /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1636E0B820065A6300A5DCEE /* SecondViewController.swift */; };
 		164921431FFF9EC100D0EE16 /* ExpandableNames.swift in Sources */ = {isa = PBXBuildFile; fileRef = 164921421FFF9EC100D0EE16 /* ExpandableNames.swift */; };
 		168392F220009D1500B1C483 /* ContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 168392F120009D1500B1C483 /* ContactCell.swift */; };
 		16EAEF0C1FE66E8100CF9578 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16EAEF0B1FE66E8100CF9578 /* AppDelegate.swift */; };
@@ -36,6 +37,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1636E0B820065A6300A5DCEE /* SecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
 		164921421FFF9EC100D0EE16 /* ExpandableNames.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableNames.swift; sourceTree = "<group>"; };
 		168392F120009D1500B1C483 /* ContactCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCell.swift; sourceTree = "<group>"; };
 		16EAEF081FE66E8100CF9578 /* IOS_Basics.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IOS_Basics.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -109,6 +111,7 @@
 				16EAEF171FE66E8100CF9578 /* Info.plist */,
 				164921421FFF9EC100D0EE16 /* ExpandableNames.swift */,
 				168392F120009D1500B1C483 /* ContactCell.swift */,
+				1636E0B820065A6300A5DCEE /* SecondViewController.swift */,
 			);
 			path = IOS_Basics;
 			sourceTree = "<group>";
@@ -268,6 +271,7 @@
 				168392F220009D1500B1C483 /* ContactCell.swift in Sources */,
 				164921431FFF9EC100D0EE16 /* ExpandableNames.swift in Sources */,
 				16EAEF0E1FE66E8100CF9578 /* ViewController.swift in Sources */,
+				1636E0B920065A6300A5DCEE /* SecondViewController.swift in Sources */,
 				16EAEF0C1FE66E8100CF9578 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

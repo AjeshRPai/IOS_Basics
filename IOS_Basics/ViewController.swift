@@ -7,19 +7,13 @@
 //
 
 import UIKit
-
 import Contacts
-
-
-
 class ViewController: UITableViewController {
     
     let cellid="cellid"
-    
     var twoDimensionalArray = [ExpandableNames]()
 
     func favCallback(cell:UITableViewCell){
-        
         let indexPathTapped = tableView.indexPath(for: cell)
         let contact = self.twoDimensionalArray[indexPathTapped!.section]
             .names[indexPathTapped!.row]
@@ -27,12 +21,25 @@ class ViewController: UITableViewController {
         twoDimensionalArray[indexPathTapped!.section]
             .names[indexPathTapped!.row].isFavourite = hasFavourited
         cell.accessoryView?.tintColor = hasFavourited ? UIColor.red : .gray
+    }
+    
+    
+   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    DispatchQueue.main.async(){
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
         
+        let mapViewControllerObj = storyboard.instantiateViewController(withIdentifier: "1234") as? SecondViewController
+        if(mapViewControllerObj != nil){
+           self.present(mapViewControllerObj!, animated: true, completion: nil)
+        }else {
+           print("This was empty")
+        }
+    }
+    
     }
     
     var showindexpaths=false
-    
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         fetchContacts()
@@ -65,8 +72,6 @@ class ViewController: UITableViewController {
                 fatalError("there was some error ")
             }
         }
-        
-        
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -110,18 +115,13 @@ class ViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         let cell = ContactCell(style: .subtitle, reuseIdentifier: cellid)
         cell.link = self
         let favouritableContact = twoDimensionalArray[indexPath.section].names[indexPath.row]
-        
         print(favouritableContact.contact.givenName)
-
-        
         cell.accessoryView?.tintColor = favouritableContact.isFavourite ? UIColor.red : .gray
         cell.textLabel?.text = favouritableContact.contact.givenName + " " + favouritableContact.contact.familyName
         cell.detailTextLabel?.text = favouritableContact.contact.phoneNumbers.first?.value.stringValue
-
         return cell
     }
     
@@ -136,8 +136,6 @@ class ViewController: UITableViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    
 }
 
 
